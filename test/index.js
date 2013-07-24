@@ -14,3 +14,11 @@ it('can make simple api requests', function (done) {
     done()
   })
 })
+it('can have a `host` option passed in', function (done) {
+  this.timeout(5000)
+  github.buffer('head', '/ForbesLindesay/github-basic', null, {host: 'github.com'}, function (err, res) {
+    if (err) return done(err)
+    assert(res.statusCode === 200)
+    done()
+  })
+})

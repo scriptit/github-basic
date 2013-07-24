@@ -101,9 +101,6 @@ function request(method, path, query, options, callback) {
 
     var hasBody = query !== null && ('head|get|delete'.indexOf(method) === -1)
 
-    var host = 'api.github.com'
-    var port = 443
-
     var headers = {
         'host': host,
         'user-agent': 'ForbesLindesay/github-basic',

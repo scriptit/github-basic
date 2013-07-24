@@ -1,0 +1,22 @@
+{
+  "name": "github-basic",
+  "version": "0.0.0",
+  "description": "Basic https interface to GitHub",
+  "keywords": [],
+  "dependencies": {
+    "promise": "~3.2.0",
+    "barrage": "0.0.4"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ForbesLindesay/github-basic.git"
+  },
+  "author": "ForbesLindesay",
+  "license": "MIT"
+}

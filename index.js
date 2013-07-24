@@ -99,6 +99,8 @@ function request(method, path, query, options, callback) {
       return res
     })
 
+    var errPath = path
+
     var hasBody = query !== null && ('head|get|delete'.indexOf(method) === -1)
 
     var headers = {
@@ -159,14 +161,14 @@ function request(method, path, query, options, callback) {
           .then(function (body) {
             try {
               body = JSON.parse(body)
-              var err = new Error(path + ' returned ' + body.message)
+              var err = new Error(method.toUpperCase() + ': ' + errPath + ' returned ' + body.message)
               err.name = STATUS_CODES[res.statusCode].replace(/ /g, '')
               err.statusCode = (err.code = res.statusCode)
               err.res = res
               res.body = body
               return err
             } catch (ex) {
-              var err = new Error(path + ' returned:\n' + body.toString())
+              var err = new Error(method.toUpperCase() + ': ' + errPath + ' returned:\n' + body.toString())
               err.name = STATUS_CODES[res.statusCode].replace(/ /g, '')
               err.statusCode = (err.code = res.statusCode)
               err.res = res

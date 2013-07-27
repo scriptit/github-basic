@@ -9,10 +9,12 @@ var qs = require('querystring').stringify
 
 var Promise = require('promise')
 var barrage = require('barrage')
+var parseLinks = require('parse-links')
 
 exports = (module.exports = request)
 exports.buffer = buffer
 exports.json = json
+exports.stream = stream
 
 /**
  * ## github(method, path, query, options, callback)
@@ -243,4 +245,51 @@ function json(method, path, query, options, callback) {
       return res
     })
     .nodeify(callback)
+}
+
+/**
+ * ## github.stream(method, path, query, options)
+ *
+ * Returns a stream of results from a paginated end point
+ */
+function stream(path, query, options) {
+  query = query || {}
+  options = options || {}
+  var pageSize = options.pageSize || 100
+  var currentPage = 0
+  var running = false
+  function getPage(page) {
+    var q = JSON.parse(JSON.stringify(query))
+    q.page = page + 1
+    q.per_page = pageSize
+    return q
+  }
+  var source = new barrage.Readable({objectMode: true})
+  source._read = function () {
+    if (running) return
+    running = true
+    json('get', path, getPage(currentPage++), options)
+      .then(function (res) {
+        var last = !parseLinks(res.headers.link).next
+        res = res.body
+        if (res.length === 0) {
+          return source.push(null)
+        }
+        var cont = true
+        for (var i = 0; i < res.length; i++) {
+          cont = source.push(res[i])
+        }
+        if (last) {
+          return source.push(null)
+        }
+        running = false
+        if (cont) source._read()
+      })
+      .done(null, function (err) {
+        source.emit('error', err)
+        source.push(null)
+        running = true
+      })
+  }
+  return source
 }

@@ -89,7 +89,7 @@ function request(method, path, query, options, callback) {
     var protocol = options.protocol == undefined ? 'https' : options.protocol
     var host = options.host == undefined ? 'api.github.com' : options.host
     assert(['http', 'https'].indexOf(protocol) != -1, 'The only supported protocols are `http` and `https`')
-    assert(['api.github.com', 'github.com', 'gist.github.com'].indexOf(host) != -1, 'github-basic can only be used with `api.github.com`, `github.com` and `gist.github.com`')
+    assert(['api.github.com', 'github.com', 'gist.github.com', 'raw.github.com'].indexOf(host) != -1, 'github-basic can only be used with `api.github.com`, `github.com`, `gist.github.com` and `raw.github.com`')
     method = method.toLowerCase()
     assert(['head', 'get', 'delete', 'post', 'patch', 'put'].indexOf(method) != -1, 'method must be `head`, `get`, `delete`, `post`, `patch` or `put`')
     assert(query === null || typeof query === 'object', 'query must be an object or `null`')

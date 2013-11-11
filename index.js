@@ -270,7 +270,7 @@ function stream(path, query, options) {
     running = true
     json('get', path, getPage(currentPage++), options)
       .then(function (res) {
-        var last = !parseLinks(res.headers.link).next
+        var last = !res.headers.link || !parseLinks(res.headers.link).next
         res = res.body
         if (res.length === 0) {
           return source.push(null)

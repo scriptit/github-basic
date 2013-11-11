@@ -22,3 +22,26 @@ it('can have a `host` option passed in', function (done) {
     done()
   })
 })
+it('can make streaming requests', function (done) {
+  this.timeout(20000)
+  github.stream('/repos/:owner/:repo/subscribers', {
+    owner: 'visionmedia',
+    repo: 'jade'
+  }).buffer(function (err, res) {
+    if (err) return done(err)
+    assert(Array.isArray(res))
+    assert(res.length > 150)
+    done()
+  })
+})
+it('can make streaming requests with just one page', function (done) {
+  this.timeout(20000)
+  github.stream('/repos/:owner/:repo/subscribers', {
+    owner: 'ForbesLindesay',
+    repo: 'github-basic'
+  }).buffer(function (err, res) {
+    if (err) return done(err)
+    assert(Array.isArray(res))
+    done()
+  })
+})

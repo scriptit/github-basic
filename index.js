@@ -154,7 +154,7 @@ function request(method, path, query, options, callback) {
       res.body = barrage(res)
       if (res.statusCode === 301 || res.statusCode === 302 || res.statusCode === 307) {
         var location = url.parse(res.headers.location)
-        options.protocol = locaiton.protocol
+        options.protocol = location.protocol
         options.host = location.host
         return resolve(request(method, location.pathname, query, options))
       }

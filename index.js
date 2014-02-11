@@ -84,7 +84,7 @@ function request(method, path, query, options, callback) {
     callback = options
     options = undefined
   }
-  return Promise(function (resolve, reject) {
+  return new Promise(function (resolve, reject) {
     options = JSON.parse(JSON.stringify(options || {})) //this is a good enough clone
     var protocol = options.protocol == undefined ? 'https' : options.protocol
     var host = options.host == undefined ? 'api.github.com' : options.host

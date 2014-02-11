@@ -4,7 +4,7 @@
   "description": "Basic https interface to GitHub",
   "keywords": [],
   "dependencies": {
-    "promise": "~3.2.0",
+    "promise": "~4.0.0",
     "barrage": "~1.0.0",
     "parse-links": "0.1.0"
   },

@@ -5,7 +5,7 @@ var url = require('url')
 var STATUS_CODES = require('http').STATUS_CODES
 var protocols = { http: require('http'), https: require('https') }
 var ports = { http: 80, https: 443 }
-var qs = require('querystring').stringify
+var querystring = require('querystring')
 
 var Promise = require('promise')
 var barrage = require('barrage')
@@ -116,7 +116,7 @@ function request(method, path, query, options, callback) {
       headers['content-length'] = Buffer.byteLength(body, 'utf8')
       headers['content-type'] = 'application/json; charset=utf-8'
     } else if (query !== null) {
-      body = qs(query)
+      body = querystring.stringify(query)
       if (body.length) path += '?' + body
     }
 
@@ -255,21 +255,33 @@ function stream(path, query, options) {
   query = query || {}
   options = options || {}
   var pageSize = options.pageSize || 100
-  var currentPage = 0
+  var nextLink = null
   var running = false
-  function getPage(page) {
-    var q = JSON.parse(JSON.stringify(query))
-    q.page = page + 1
-    q.per_page = pageSize
-    return q
+  function getNextUrl(nextLink) {
+    var nextUrl
+    if (nextLink) {
+      nextUrl = url.parse(nextLink)
+    } else {
+      var q = JSON.parse(JSON.stringify(query))
+      q.per_page = pageSize
+      nextUrl = url.parse(url.format({ pathname: path, query: q }))
+    }
+    return nextUrl
   }
   var source = new barrage.Readable({objectMode: true})
   source._read = function () {
     if (running) return
     running = true
-    json('get', path, getPage(currentPage++), options)
+    var apiUrl = getNextUrl(nextLink)
+    json('get', apiUrl.pathname, querystring.parse(apiUrl.query), options)
       .then(function (res) {
-        var last = !res.headers.link || !parseLinks(res.headers.link).next
+        var last = true
+          , parsedLinks
+        if (res.headers.link) {
+          parsedLinks = parseLinks(res.headers.link)
+          nextLink = parsedLinks.next
+          last = !nextLink
+        }
         res = res.body
         if (res.length === 0) {
           return source.push(null)

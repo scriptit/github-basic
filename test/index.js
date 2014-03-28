@@ -34,6 +34,19 @@ it('can make streaming requests', function (done) {
     done()
   })
 })
+it('can make streaming requests for commits', function (done) {
+  this.timeout(40000)
+  github.stream('/repos/:owner/:repo/commits', {
+    owner: 'visionmedia',
+    repo: 'jade'
+  }).buffer(function (err, res) {
+    if (err) return done(err)
+    assert(Array.isArray(res))
+    assert(res.length > 150)
+    console.dir(res)
+    done()
+  })
+})
 it('can make streaming requests with just one page', function (done) {
   this.timeout(20000)
   github.stream('/repos/:owner/:repo/subscribers', {

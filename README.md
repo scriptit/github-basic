@@ -2,9 +2,9 @@
 
 Basic https interface to GitHub
 
-[![Build Status](https://travis-ci.org/ForbesLindesay/github-basic.png?branch=master)](https://travis-ci.org/ForbesLindesay/github-basic)
-[![Dependency Status](https://gemnasium.com/ForbesLindesay/github-basic.png)](https://gemnasium.com/ForbesLindesay/github-basic)
-[![NPM version](https://badge.fury.io/js/github-basic.png)](http://badge.fury.io/js/github-basic)
+[![Build Status](https://img.shields.io/travis/ForbesLindesay/github-basic/master.svg)](https://travis-ci.org/ForbesLindesay/github-basic)
+[![Dependency Status](https://img.shields.io/gemnasium/ForbesLindesay/github-basic.svg)](https://gemnasium.com/ForbesLindesay/github-basic)
+[![NPM version](https://img.shields.io/npm/v/github-basic.svg)](http://badge.fury.io/js/github-basic)
 
 ## Installation
 

@@ -77,17 +77,23 @@ A standard response object with a readable stream as the `.body` property. (N.B.
 
 ## github.buffer(method, path, query, options, callback)
 
-Same as `github(method, path, query, options, callback)` except `res.body` is a string containing the buffered response
+Same as `github(method, path, query, options, callback)` except `res.body` is a string containing the buffered response.
+
+Pass `options.cache = true` to enable a file system cache for GET requests with support for ETag/304 responses. This is recommended as it makes it much easier to avoid going over GitHub's rate limits.
 
 ## github.json(method, path, query, options, callback)
 
-Same as `github(method, path, query, options, callback)` except `res.body` is a JSON object containing the parsed response
+Same as `github(method, path, query, options, callback)` except `res.body` is a JSON object containing the parsed response.
+
+Pass `options.cache = true` to enable a file system cache for GET requests with support for ETag/304 responses. This is recommended as it makes it much easier to avoid going over GitHub's rate limits.
 
 ## github.stream(path, query, options)
 
 Sometimes the easiest way to handle GitHub's paginated results is to treat them as a stream.  This method isn't (currently) clever enough to do streaming JSON parsing of the response, but it will keep requesting more pages as needed and it works properly with back pressure so as to not request more pages than are needed.
 
 This method only supports `'GET'` requests, so doesn't take a `method` parameter
+
+Pass `options.cache = true` to enable a file system cache for GET requests with support for ETag/304 responses. This is recommended as it makes it much easier to avoid going over GitHub's rate limits.
 
 ### Usage
 

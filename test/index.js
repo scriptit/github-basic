@@ -1,7 +1,11 @@
+'use strict';
+
 var assert = require('assert')
+var Promise = require('promise')
 var github = require('../')
 
 var options = {
+  cache: true,
   auth: {
     type: 'oauth',
     token: '90993e4e47b0fdd1f51f4c67b17368c62a3d6097'
@@ -9,12 +13,14 @@ var options = {
 }
 
 var hostOptions = {
+  cache: true,
   host: 'github.com',
   auth: {
     type: 'oauth',
     token: '90993e4e47b0fdd1f51f4c67b17368c62a3d6097'
   }
 }
+
 
 it('can make simple api requests', function (done) {
   this.timeout(5000)
@@ -71,4 +77,31 @@ it('can make streaming requests with just one page', function (done) {
     assert(Array.isArray(res))
     done()
   })
+})
+
+it('caches results', function (done) {
+  this.timeout(10000);
+  function doRequest() {
+    return github.json('get', '/repos/:owner/:repo/git/refs/:ref', {
+      owner: 'ForbesLindesay',
+      repo: 'github-basic',
+      ref: 'heads/master'
+    }, options).then(function (res) {
+      return res
+    })
+  }
+  function doManyRequests(n) {
+    if (n === 0) return Promise.resolve([])
+    return doRequest().then(function (res) {
+      return doManyRequests(n - 1).then(function (rest) {
+        rest.unshift(res)
+        return rest
+      })
+    })
+  }
+  doManyRequests(5).then(function (results) {
+    results.forEach(function (res) {
+      assert.deepEqual(results[0], res)
+    })
+  }).nodeify(done)
 })

@@ -1,5 +1,7 @@
 'use strict'
 
+var crypto = require('crypto')
+var fs = require('fs')
 var assert = require('assert')
 var url = require('url')
 var STATUS_CODES = require('http').STATUS_CODES
@@ -10,6 +12,9 @@ var querystring = require('querystring')
 var Promise = require('promise')
 var barrage = require('barrage')
 var parseLinks = require('parse-links')
+var mkdir = Promise.denodeify(fs.mkdir)
+var read = Promise.denodeify(fs.readFile)
+var write = Promise.denodeify(fs.writeFile)
 
 exports = (module.exports = request)
 exports.buffer = buffer
@@ -218,15 +223,48 @@ function buffer(method, path, query, options, callback) {
     callback = options
     options = undefined
   }
-  return request(method, path, query, options)
-    .then(function (res) {
-      return res.body.buffer('utf8')
-        .then(function (body) {
-          res.body = body
-          return res
-        })
-    })
-    .nodeify(callback)
+  function doRequest() {
+    return request(method, path, query, options)
+      .then(function (res) {
+        return res.body.buffer('utf8')
+          .then(function (body) {
+            return {statusCode: res.statusCode, headers: res.headers, body: body}
+          })
+      })
+  }
+  if (options.cache && method.toUpperCase() === 'GET') {
+    var cacheKey = __dirname + '/cache/' + getCacheKey(method, path, query, options)
+    return read(cacheKey + '.etag', 'utf8').then(function (etag) {
+      var opts = options || {}
+      options = {}
+      Object.keys(opts).forEach(function (key) {
+        if (key !== 'headers') {
+          options[key] = opts[key]
+        }
+      })
+      options.headers = {}
+      Object.keys(opts.headers || {}).forEach(function (key) {
+        options.headers[key] = opts.headers[key]
+      })
+      options.headers['If-None-Match'] = etag
+    }, noop).then(function () {
+      return doRequest()
+    }).then(function (res) {
+      if (res.statusCode === 304) {
+        return read(cacheKey, 'utf8').then(JSON.parse)
+      } else {
+        if (!res.headers['etag']) return res
+        return mkdir(__dirname + '/cache').then(null, noop).then(function () {
+          return Promise.all([
+            write(cacheKey, JSON.stringify(res)),
+            write(cacheKey + '.etag', res.headers['etag'])
+          ])
+        }).then(function () { return res })
+      }
+    }).nodeify(callback)
+  } else {
+    return doRequest().nodeify(callback)
+  }
 }
 /**
  * ## github.json(method, path, query, options, callback)
@@ -303,4 +341,28 @@ function stream(path, query, options) {
       })
   }
   return source
+}
+
+function noop() {
+}
+function getCacheKey(method, path, query, options) {
+  var hash = crypto.createHash('sha512')
+  hash.update(method)
+  hash.update('@')
+  hash.update(path)
+  pushObject(query)
+  pushObject(options)
+  function pushObject(obj) {
+    if (typeof obj !== 'object') {
+      hash.update('@')
+      hash.update(obj + '')
+    } else {
+      Object.keys(obj || {}).sort().forEach(function (key) {
+        hash.update('@')
+        hash.update(key)
+        pushObject(obj[key])
+      })
+    }
+  }
+  return hash.digest('hex')
 }

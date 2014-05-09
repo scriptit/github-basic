@@ -104,10 +104,16 @@ function request(method, path, query, options, callback) {
     var errPath = path
 
     var parsedUrl = url.parse(path)
-    var protocol = (parsedUrl.protocol || 'https:').replace(/\:$/, '')
+    var protocol = options.protocol || (parsedUrl.protocol || 'https:').replace(/\:$/, '')
     assert(protocol === 'http' || protocol === 'https', 'The only supported protocols are "http" and "https", not "' + protocol + '"')
-    var host = parsedUrl.host || 'api.github.com'
+    var host = options.host || parsedUrl.host || 'api.github.com'
     path = parsedUrl.path
+    
+    if (options.protocol || options.host) {
+      var warning = new Error('"options.protocol" and "options.host" have been deprecated, you can now just put the entire url in the "path"')
+      warning.name = 'Warning'
+      console.warning(warning.stack)
+    }
 
     var hasBody = query !== null && ('head|get|delete'.indexOf(method) === -1)
 

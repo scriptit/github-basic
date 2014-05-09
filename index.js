@@ -6,7 +6,6 @@ var assert = require('assert')
 var url = require('url')
 var STATUS_CODES = require('http').STATUS_CODES
 var protocols = { http: require('http'), https: require('https') }
-var ports = { http: 80, https: 443 }
 var querystring = require('querystring')
 
 var Promise = require('promise')
@@ -91,9 +90,6 @@ function request(method, path, query, options, callback) {
   }
   return new Promise(function (resolve, reject) {
     options = JSON.parse(JSON.stringify(options || {})) //this is a good enough clone
-    var protocol = options.protocol == undefined ? 'https' : options.protocol
-    var host = options.host == undefined ? 'api.github.com' : options.host
-    assert(['http', 'https'].indexOf(protocol) != -1, 'The only supported protocols are `http` and `https`')
     method = method.toLowerCase()
     assert(['head', 'get', 'delete', 'post', 'patch', 'put'].indexOf(method) != -1, 'method must be `head`, `get`, `delete`, `post`, `patch` or `put`')
     assert(query === null || typeof query === 'object', 'query must be an object or `null`')
@@ -106,6 +102,12 @@ function request(method, path, query, options, callback) {
     })
 
     var errPath = path
+
+    var parsedUrl = url.parse(path)
+    var protocol = (parsedUrl.protocol || 'https:').replace(/\:$/, '')
+    assert(protocol === 'http' || protocol === 'https', 'The only supported protocols are "http" and "https", not "' + protocol + '"')
+    var host = parsedUrl.host || 'api.github.com'
+    path = parsedUrl.path
 
     var hasBody = query !== null && ('head|get|delete'.indexOf(method) === -1)
 
@@ -126,6 +128,9 @@ function request(method, path, query, options, callback) {
     }
 
     if (options.auth) {
+      if (typeof options.auth === 'string') {
+        options.auth = {type: 'oauth', token: options.auth};
+      }
       switch (options.auth.type) {
         case 'oauth':
           path += (path.indexOf('?') === -1 ? '?' : '&') + 'access_token=' + encodeURIComponent(options.auth.token)
@@ -149,7 +154,6 @@ function request(method, path, query, options, callback) {
     var req = protocols[protocol].request({
       scheme: protocol,
       host: host,
-      port: ports[protocol],
       path: path,
       method: method,
       agent: false,
@@ -157,10 +161,8 @@ function request(method, path, query, options, callback) {
     }, function (res) {
       res.body = barrage(res)
       if (res.statusCode === 301 || res.statusCode === 302 || res.statusCode === 307) {
-        var location = url.parse(res.headers.location)
-        options.protocol = location.protocol.substring(0, location.protocol.length - 1);
-        options.host = location.host
-        return resolve(request(method, location.pathname, query, options))
+        var location = res.headers.location
+        return resolve(request(method, location, query, options))
       }
       if (res.statusCode >= 400) {
         return res.body.buffer('utf8')

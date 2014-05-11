@@ -42,17 +42,24 @@ github('GET', '/users/ForbesLindesay/gists', {since: since}, function (err, res)
 
 // using promises
 
-github('GET', '/users/:user/gists', {user: 'ForbesLindesay', since: since})
-  .done(function (res) {
-   res.body.pipe(process.stdout)
-  })
+github('GET', '/users/:user/gists', {user: 'ForbesLindesay', since: since}).done(function (res) {
+  res.body.pipe(process.stdout)
+})
 
 //or
 
-github('GET', '/users/ForbesLindesay/gists', {since: since})
-  .done(function (res) {
-   res.body.pipe(process.stdout)
-  })
+github('GET', '/users/ForbesLindesay/gists', {since: since}).done(function (res) {
+  res.body.pipe(process.stdout)
+})
+
+// getting raw github data
+
+github('GET', 'https://raw.githubusercontent.com/:owner/:repo/master/README.md', {
+  owner: 'ForbesLindesay',
+  repo: 'github-basic'
+}).done(function (res) {
+  res.body.pipe(process.stdout);
+});
 ```
 
 ### Parameters
@@ -65,10 +72,8 @@ github('GET', '/users/ForbesLindesay/gists', {since: since})
 
 ### Options
 
- - auth: (default: null) `{type:'oauth',token:'<my oauth token>'}` or `{type:'basic',username:'my user',password:'my password'}`
+ - auth: (default: null) `{ type: 'oauth', token: '<my oauth token>' }` or `{ type: 'basic', username: 'my user', password: 'my password' }` or just pass a string and it will be used as an oauth token
  - timeout: (default: 2 minutes) timeout in ms or string parsed by `ms` like `'30 minutes'`
- - protocol: (default: `https`) can be `http` or `https`
- - host: (default: `api.github.com`) can be `api.github.com`, `github.com`, `raw.github.com` or `gist.github.com`
  - headers: (default: `{}`) override default headers in the request
 
 ### Result

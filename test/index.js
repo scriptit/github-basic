@@ -12,16 +12,6 @@ var options = {
   }
 }
 
-var hostOptions = {
-  cache: true,
-  host: 'github.com',
-  auth: {
-    type: 'oauth',
-    token: '90993e4e47b0fdd1f51f4c67b17368c62a3d6097'
-  }
-}
-
-
 it('can make simple api requests', function (done) {
   this.timeout(5000)
   github.json('get', '/users/:user/gists', {user: 'ForbesLindesay'}, options, function (err, res) {
@@ -37,7 +27,7 @@ it('can make simple api requests', function (done) {
 })
 it('can have a `host` option passed in', function (done) {
   this.timeout(5000)
-  github.buffer('head', '/ForbesLindesay/github-basic', null, hostOptions, function (err, res) {
+  github.buffer('head', 'https://github.com/ForbesLindesay/github-basic', null, options, function (err, res) {
     if (err) return done(err)
     assert(res.statusCode === 200)
     done()

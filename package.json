@@ -4,15 +4,16 @@
   "description": "Basic https interface to GitHub",
   "keywords": [],
   "dependencies": {
-    "promise": "~4.0.0",
-    "barrage": "~1.0.0",
-    "parse-links": "0.1.0"
+    "barrage": "^1.0.0",
+    "parse-links": "0.1.0",
+    "promise": "^5.0.0",
+    "then-request": "^1.0.1"
   },
   "devDependencies": {
     "mocha": "*"
   },
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "mocha test/index.js --bail -R spec"
   },
   "repository": {
     "type": "git",

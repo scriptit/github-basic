@@ -7,7 +7,7 @@
     "barrage": "^1.0.0",
     "parse-links": "0.1.0",
     "promise": "^5.0.0",
-    "then-request": "^1.0.1"
+    "then-request": "^1.0.2"
   },
   "devDependencies": {
     "mocha": "*"

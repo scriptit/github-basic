@@ -1,6 +1,6 @@
 # github-basic
 
-Basic https interface to GitHub
+Basic https interface to GitHub.  Intended so it's easy to code using [the official documentation](https://developer.github.com/).  It also includes helpers for streaming paged results, and doing all the necessary actions to automatically submit pull requests.
 
 [![Build Status](https://img.shields.io/travis/ForbesLindesay/github-basic/master.svg)](https://travis-ci.org/ForbesLindesay/github-basic)
 [![Dependency Status](https://img.shields.io/gemnasium/ForbesLindesay/github-basic.svg)](https://gemnasium.com/ForbesLindesay/github-basic)
@@ -73,13 +73,93 @@ client.getStream('/users/:user/repos', {user: 'ForbesLindesay'})
   .pipe(process.stdout)
 ```
 
-Output:
+### client.exists(user, repo[, callback])
 
-```js
-{"id":11285217,"name":"affair","full_name":"ForbesLindesay/affair","owner":{"login":"ForbesLindesay","id":1260646,"avatar_url":"https://secure.gravatar.com/avatar/eb3e104452d654350a5d1a65caa2e49e?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png","gravatar_id":"eb3e104452d654350a5d1a65caa2e49e","url":"https://api.github.com/users/ForbesLindesay","html_url":"https://github.com/ForbesLindesay","followers_url":"https://api.github.com/users/ForbesLindesay/followers","following_url":"https://api.github.com/users/ForbesLindesay/following{/other_user}","gists_url":"https://api.github.com/users/ForbesLindesay/gists{/gist_id}","starred_url":"https://api.github.com/users/ForbesLindesay/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ForbesLindesay/subscriptions","organizations_url":"https://api.github.com/users/ForbesLindesay/orgs","repos_url":"https://api.github.com/users/ForbesLindesay/repos","events_url":"https://api.github.com/users/ForbesLindesay/events{/privacy}","received_events_url":"https://api.github.com/users/ForbesLindesay/received_events","type":"User"},"private":false,"html_url":"https://github.com/ForbesLindesay/affair","description":"Cheating on event emitters with mixins and special browser NodeElement handling","fork":false,"url":"https://api.github.com/repos/ForbesLindesay/affair","forks_url":"https://api.github.com/repos/ForbesLindesay/affair/forks","keys_url":"https://api.github.com/repos/ForbesLindesay/affair/keys{/key_id}","collaborators_url":"https://api.github.com/repos/ForbesLindesay/affair/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/ForbesLindesay/affair/teams","hooks_url":"https://api.github.com/repos/ForbesLindesay/affair/hooks","issue_events_url":"https://api.github.com/repos/ForbesLindesay/affair/issues/events{/number}","events_url":"https://api.github.com/repos/ForbesLindesay/affair/events","assignees_url":"https://api.github.com/repos/ForbesLindesay/affair/assignees{/user}","branches_url":"https://api.github.com/repos/ForbesLindesay/affair/branches{/branch}","tags_url":"https://api.github.com/repos/ForbesLindesay/affair/tags","blobs_url":"https://api.github.com/repos/ForbesLindesay/affair/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/ForbesLindesay/affair/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/ForbesLindesay/affair/git/refs{/sha}","trees_url":"https://api.github.com/repos/ForbesLindesay/affair/git/trees{/sha}","statuses_url":"https://api.github.com/repos/ForbesLindesay/affair/statuses/{sha}","languages_url":"https://api.github.com/repos/ForbesLindesay/affair/languages","stargazers_url":"https://api.github.com/repos/ForbesLindesay/affair/stargazers","contributors_url":"https://api.github.com/repos/ForbesLindesay/affair/contributors","subscribers_url":"https://api.github.com/repos/ForbesLindesay/affair/subscribers","subscription_url":"https://api.github.com/repos/ForbesLindesay/affair/subscription","commits_url":"https://api.github.com/repos/ForbesLindesay/affair/commits{/sha}","git_commits_url":"https://api.github.com/repos/ForbesLindesay/affair/git/commits{/sha}","comments_url":"https://api.github.com/repos/ForbesLindesay/affair/comments{/number}","issue_comment_url":"https://api.github.com/repos/ForbesLindesay/affair/issues/comments/{number}","contents_url":"https://api.github.com/repos/ForbesLindesay/affair/contents/{+path}","compare_url":"https://api.github.com/repos/ForbesLindesay/affair/compare/{base}...{head}","merges_url":"https://api.github.com/repos/ForbesLindesay/affair/merges","archive_url":"https://api.github.com/repos/ForbesLindesay/affair/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/ForbesLindesay/affair/downloads","issues_url":"https://api.github.com/repos/ForbesLindesay/affair/issues{/number}","pulls_url":"https://api.github.com/repos/ForbesLindesay/affair/pulls{/number}","milestones_url":"https://api.github.com/repos/ForbesLindesay/affair/milestones{/number}","notifications_url":"https://api.github.com/repos/ForbesLindesay/affair/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/ForbesLindesay/affair/labels{/name}","created_at":"2013-07-09T14:51:59Z","updated_at":"2013-07-22T20:56:07Z","pushed_at":"2013-07-22T20:56:06Z","git_url":"git://github.com/ForbesLindesay/affair.git","ssh_url":"git@github.com:ForbesLindesay/affair.git","clone_url":"https://github.com/ForbesLindesay/affair.git","svn_url":"https://github.com/ForbesLindesay/affair","homepage":null,"size":86,"watchers_count":0,"language":"JavaScript","has_issues":true,"has_downloads":true,"has_wiki":true,"forks_count":0,"mirror_url":null,"open_issues_count":0,"forks":0,"open_issues":0,"watchers":0,"master_branch":"master","default_branch":"master","permissions":{"admin":false,"push":false,"pull":true}}
-{"id":5729415,"name":"ajax","full_name":"ForbesLindesay/ajax","owner":{"login":"ForbesLindesay","id":1260646,"avatar_url":"https://secure.gravatar.com/avatar/eb3e104452d654350a5d1a65caa2e49e?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png","gravatar_id":"eb3e104452d654350a5d1a65caa2e49e","url":"https://api.github.com/users/ForbesLindesay","html_url":"https://github.com/ForbesLindesay","followers_url":"https://api.github.com/users/ForbesLindesay/followers","following_url":"https://api.github.com/users/ForbesLindesay/following{/other_user}","gists_url":"https://api.github.com/users/ForbesLindesay/gists{/gist_id}","starred_url":"https://api.github.com/users/ForbesLindesay/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ForbesLindesay/subscriptions","organizations_url":"https://api.github.com/users/ForbesLindesay/orgs","repos_url":"https://api.github.com/users/ForbesLindesay/repos","events_url":"https://api.github.com/users/ForbesLindesay/events{/privacy}","received_events_url":"https://api.github.com/users/ForbesLindesay/received_events","type":"User"},"private":false,"html_url":"https://github.com/ForbesLindesay/ajax","description":"Standalone AJAX library inspired by jQuery/zepto","fork":false,"url":"https://api.github.com/repos/ForbesLindesay/ajax","forks_url":"https://api.github.com/repos/ForbesLindesay/ajax/forks","keys_url":"https://api.github.com/repos/ForbesLindesay/ajax/keys{/key_id}","collaborators_url":"https://api.github.com/repos/ForbesLindesay/ajax/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/ForbesLindesay/ajax/teams","hooks_url":"https://api.github.com/repos/ForbesLindesay/ajax/hooks","issue_events_url":"https://api.github.com/repos/ForbesLindesay/ajax/issues/events{/number}","events_url":"https://api.github.com/repos/ForbesLindesay/ajax/events","assignees_url":"https://api.github.com/repos/ForbesLindesay/ajax/assignees{/user}","branches_url":"https://api.github.com/repos/ForbesLindesay/ajax/branches{/branch}","tags_url":"https://api.github.com/repos/ForbesLindesay/ajax/tags","blobs_url":"https://api.github.com/repos/ForbesLindesay/ajax/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/ForbesLindesay/ajax/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/ForbesLindesay/ajax/git/refs{/sha}","trees_url":"https://api.github.com/repos/ForbesLindesay/ajax/git/trees{/sha}","statuses_url":"https://api.github.com/repos/ForbesLindesay/ajax/statuses/{sha}","languages_url":"https://api.github.com/repos/ForbesLindesay/ajax/languages","stargazers_url":"https://api.github.com/repos/ForbesLindesay/ajax/stargazers","contributors_url":"https://api.github.com/repos/ForbesLindesay/ajax/contributors","subscribers_url":"https://api.github.com/repos/ForbesLindesay/ajax/subscribers","subscription_url":"https://api.github.com/repos/ForbesLindesay/ajax/subscription","commits_url":"https://api.github.com/repos/ForbesLindesay/ajax/commits{/sha}","git_commits_url":"https://api.github.com/repos/ForbesLindesay/ajax/git/commits{/sha}","comments_url":"https://api.github.com/repos/ForbesLindesay/ajax/comments{/number}","issue_comment_url":"https://api.github.com/repos/ForbesLindesay/ajax/issues/comments/{number}","contents_url":"https://api.github.com/repos/ForbesLindesay/ajax/contents/{+path}","compare_url":"https://api.github.com/repos/ForbesLindesay/ajax/compare/{base}...{head}","merges_url":"https://api.github.com/repos/ForbesLindesay/ajax/merges","archive_url":"https://api.github.com/repos/ForbesLindesay/ajax/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/ForbesLindesay/ajax/downloads","issues_url":"https://api.github.com/repos/ForbesLindesay/ajax/issues{/number}","pulls_url":"https://api.github.com/repos/ForbesLindesay/ajax/pulls{/number}","milestones_url":"https://api.github.com/repos/ForbesLindesay/ajax/milestones{/number}","notifications_url":"https://api.github.com/repos/ForbesLindesay/ajax/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/ForbesLindesay/ajax/labels{/name}","created_at":"2012-09-08T15:19:29Z","updated_at":"2013-07-25T02:02:41Z","pushed_at":"2013-04-28T00:50:49Z","git_url":"git://github.com/ForbesLindesay/ajax.git","ssh_url":"git@github.com:ForbesLindesay/ajax.git","clone_url":"https://github.com/ForbesLindesay/ajax.git","svn_url":"https://github.com/ForbesLindesay/ajax","homepage":"https://component.jit.su/ForbesLindesay/ajax","size":168,"watchers_count":28,"language":"JavaScript","has_issues":true,"has_downloads":true,"has_wiki":true,"forks_count":6,"mirror_url":null,"open_issues_count":0,"forks":6,"open_issues":0,"watchers":28,"master_branch":"master","default_branch":"master","permissions":{"admin":false,"push":false,"pull":true}}
-...
-```
+Returns `true` if `:user/:repo` exists, and `false` if requesting the repo url returns an error.
+
+### client.fork(user, repo, options[, callback])
+
+Forks the repo `github.com/:user/:repo` to the authenticated user and waits until the fork operation completes.  To fork to an organization, just pass an `organization` string in the `options` object.
+
+**N.B.** forking will currently appear successful even if the target repo already exists.
+
+### client.branch(user, repo, from, to[, callback])
+
+Creates a new branch in `github.com/:user/:repo` using `from` as the source branch and `to` as the new branch name.
+
+### client.commit(user, repo, commit, options[, callback])
+
+Commits a set of changes to `github.com/:user/:repo`.  It only supports updating text files.
+
+**commit:**
+
+An object with:
+
+property | type                | default      | description
+---------|---------------------|--------------|----------------------------
+branch   | `String`            | `'master'`   | The branch to commit to
+message  | `String`            | **required** | The commit message
+updates  | `Array<FileUpdate>` | **required** | The actual changes to make
+
+**FileUpdate:**
+
+An object with:
+
+property | type     | default      | description
+---------|----------|--------------|----------------------------
+path     | `String` | **required** | The file path within the repo (e.g. `test/index.js`)
+content  | `String` | **required** | The new content of the file
+mode     | `String` | `'100644'`   | The mode to commit the file with (you probably don't want to change this)
+type     | `String` | `'blob'`     | The type of entry to create (you probably don't want to change this)
+
+**options:**
+
+An (optonal) object with:
+
+property | type      | default      | description
+---------|-----------|--------------|----------------------------
+force    | `Boolean` | `false`      | Will force push the change if set to `true`.  You almost certainly don't want to do this.
+
+
+### client.pull(from, to, message [, callback])
+
+Creates a pull request from `from` to `to`.
+
+**from:**
+
+An object with:
+
+property | type     | default      | description
+---------|----------|--------------|----------------------------
+user     | `String` | **required** | The source user
+repo     | `String` | **required** | The source repository
+branch   | `String` | `'master'`   | The source branch
+
+**to:**
+
+An object with:
+
+property | type     | default      | description
+---------|----------|--------------|----------------------------
+user     | `String` | **required** | The destination user
+repo     | `String` | **required** | The destination repository
+branch   | `String` | `'master'`   | The destination branch
+
+**message:**
+
+Either:
+
+property | type     | default      | description
+---------|----------|--------------|----------------------------
+title    | `String` | **required** | The title of the pull request
+body     | `String` | `''`         | The body of the pull request
+
+or:
+
+property | type     | default      | description
+---------|----------|--------------|----------------------------
+issue    | `Number` | **required** | An issue number to convert into a pull request
+
 
 ## Usage
 

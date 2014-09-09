@@ -140,10 +140,10 @@ describe('helpers', function () {
         body: 'A test pull request'
       };
       client.pull(from, to, message, function (err, res) {
-        if (err) return done(err)
+        if (err) return done(err);
         ///repos/github-basic-js-test/pull-request-test/pulls/1
-        client.head('/repos/github-basic-js-test/pull-request-test/pulls/' + res.number, {}, options, done)
-      })
-    })
-  })
+        client.head('/repos/github-basic-js-test/pull-request-test/pulls/' + res.number, done);
+      });
+    });
+  });
 });

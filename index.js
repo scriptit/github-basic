@@ -1,7 +1,7 @@
 'use strict'
 
 var Promise = require('promise');
-var Client = require('./lib/client.js');
+var Client = require('./lib/helpers.js');
 
 module.exports = connect;
 function connect(options) {

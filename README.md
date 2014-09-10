@@ -24,6 +24,7 @@ Create a new GitHub client with a set of options:
  - version: (required) you should set this to the version number of the API you want to make requests against (e.g. `{version: 3}`)
  - auth: (default: null) `'<my oauth token>'` or `{username: 'my user', password: 'my password'}` to authenticate your requests
  - cache: (default: null) proivde a caching mechanism for "get" requests. Can be `'memory'`, `'file'` or a [custom cache](https://github.com/ForbesLindesay/http-basic#implementing-a-cache)
+ - sync: (default: false) set this to true and you will get a fully synchronous GitHub client, just use the results of functions directly, no need for promises or callbacks.
 
 ### client.method(path, query[, callback])
 
@@ -55,22 +56,6 @@ Make an API request and return the response as a `Buffer`.  For `get`, `head` an
 
 ```js
 client.getBuffer('/users/:user/gists', {user: 'ForbesLindesay'});
-```
-
-### client.getStream(path, query)
-
-Sometimes the easiest way to handle GitHub's paginated results is to treat them as a stream.  This method isn't (currently) clever enough to do streaming JSON parsing of the response, but it will keep requesting more pages as needed and it works properly with back pressure so as to not request more pages than are needed:
-
-```js
-var github = require('github-basic')
-var Stringifier = require('newline-json').Stringifier
-
-var client = github({version: 3})
-
-//stream all of ForbesLindesay's repos
-client.getStream('/users/:user/repos', {user: 'ForbesLindesay'})
-  .pipe(new Stringifier())
-  .pipe(process.stdout)
 ```
 
 ### client.exists(user, repo[, callback])
@@ -160,6 +145,25 @@ property | type     | default      | description
 ---------|----------|--------------|----------------------------
 issue    | `Number` | **required** | An issue number to convert into a pull request
 
+
+
+### client.getStream(path, query)
+
+**Only works in async mode (default)**
+
+Sometimes the easiest way to handle GitHub's paginated results is to treat them as a stream.  This method isn't (currently) clever enough to do streaming JSON parsing of the response, but it will keep requesting more pages as needed and it works properly with back pressure so as to not request more pages than are needed:
+
+```js
+var github = require('github-basic')
+var Stringifier = require('newline-json').Stringifier
+
+var client = github({version: 3})
+
+//stream all of ForbesLindesay's repos
+client.getStream('/users/:user/repos', {user: 'ForbesLindesay'})
+  .pipe(new Stringifier())
+  .pipe(process.stdout)
+```
 
 ## Usage
 

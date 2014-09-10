@@ -9,6 +9,9 @@
     "promise": "^5.0.0",
     "then-request": "^1.0.2"
   },
+  "optionalDependencies": {
+    "sync-request": "^1.0.1"
+  },
   "devDependencies": {
     "mocha": "*"
   },

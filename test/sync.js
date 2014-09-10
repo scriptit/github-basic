@@ -6,7 +6,7 @@ var connect = require('../')
 
 var client = connect({
   version: 3,
-  cache: 'memory',
+  cache: 'file',
   auth: '90993e4e47b0fdd1f51f4c67b17368c62a3d6097', // github-basic-js-test
   sync: true
 });

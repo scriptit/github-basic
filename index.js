@@ -1,15 +1,13 @@
 'use strict'
 
 var Promise = require('promise');
-var request = require('then-request');
-var syncRequest = require('sync-request');
 var barrage = require('barrage');
 var Client = require('./lib/helpers.js');
 
 module.exports = connect;
 function connect(options) {
   if (options.sync === true) {
-    var client = new Client(options, syncRequest, function wrap(fn) {
+    var client = new Client(options, require('sync-request'), function wrap(fn) {
       return fn.call(this);
     }, function when(value, fn) {
       return fn.call(this, value);
@@ -21,7 +19,7 @@ function connect(options) {
     };
     return client;
   } else {
-    var client = new Client(options, request, function wrap(fn) {
+    var client = new Client(options, require('then-request'), function wrap(fn) {
       try {
         return fn.call(this);
       } catch (ex) {

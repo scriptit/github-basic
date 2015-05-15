@@ -23,7 +23,7 @@ Create a new GitHub client with a set of options:
 
  - version: (required) you should set this to the version number of the API you want to make requests against (e.g. `{version: 3}`)
  - auth: (default: null) `'<my oauth token>'` or `{username: 'my user', password: 'my password'}` to authenticate your requests
- - cache: (default: null) proivde a caching mechanism for "get" requests. Can be `'memory'`, `'file'` or a [custom cache](https://github.com/ForbesLindesay/http-basic#implementing-a-cache)
+ - cache: (default: null) proivde a caching mechanism for "get" requests. Can be `'memory'`, `'file'` or a [custom cache](https://github.com/ForbesLindesay/http-basic#implementing-a-cache) (only "file" will work with the "sync" option)
  - sync: (default: false) set this to true and you will get a fully synchronous GitHub client, just use the results of functions directly, no need for promises or callbacks.
 
 ### client.method(path, query[, callback])
@@ -41,7 +41,7 @@ Make an API request and parse the response as JSON.  For `get`, `head` and `dele
 client.get('/users/:user/gists', {user: 'ForbesLindesay'});
 ```
 
-If the request is part of a paged request, you can use `res.getNext()`, `res.getPrev()`, `res.getLast()` and `res.getFirst()` to request other pages.  Note that not all of these methods will always exist (e.g. ther eis no `res.getNext()` if you already have the last page).
+If the request is part of a paged request, you can use `res.getNext()`, `res.getPrev()`, `res.getLast()` and `res.getFirst()` to request other pages.  Note that not all of these methods will always exist (e.g. there is no `res.getNext()` if you already have the last page).
 
 ### client.methodBuffer(path, query[, callback])
 

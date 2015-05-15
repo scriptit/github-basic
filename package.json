@@ -6,11 +6,11 @@
   "dependencies": {
     "barrage": "^1.1.0",
     "parse-links": "0.1.0",
-    "promise": "^6.0.0",
-    "then-request": "^1.0.2"
+    "promise": "^7.0.1",
+    "then-request": "^2.1.1"
   },
   "optionalDependencies": {
-    "sync-request": "^1.0.1"
+    "sync-request": "^2.0.1"
   },
   "devDependencies": {
     "mocha": "*"

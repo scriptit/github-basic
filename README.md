@@ -4,7 +4,7 @@ Basic https interface to GitHub.  Intended so it's easy to code using [the offic
 
 [![Build Status](https://img.shields.io/travis/ForbesLindesay/github-basic/master.svg)](https://travis-ci.org/ForbesLindesay/github-basic)
 [![Dependency Status](https://img.shields.io/gemnasium/ForbesLindesay/github-basic.svg)](https://gemnasium.com/ForbesLindesay/github-basic)
-[![NPM version](https://img.shields.io/npm/v/github-basic.svg)](http://badge.fury.io/js/github-basic)
+[![NPM version](https://img.shields.io/npm/v/github-basic.svg)](https://www.npmjs.com/package/github-basic)
 
 ## Installation
 

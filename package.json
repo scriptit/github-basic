@@ -5,12 +5,11 @@
   "keywords": [],
   "dependencies": {
     "barrage": "^1.1.0",
+    "is-browser": "^2.0.1",
     "parse-links": "0.1.0",
     "promise": "^7.0.1",
+    "sync-request": "^3.0.0",
     "then-request": "^2.1.1"
-  },
-  "optionalDependencies": {
-    "sync-request": "^2.0.1"
   },
   "devDependencies": {
     "mocha": "*"

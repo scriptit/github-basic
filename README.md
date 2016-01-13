@@ -22,7 +22,7 @@ var client = github({version: 3});
 Create a new GitHub client with a set of options:
 
  - version: (required) you should set this to the version number of the API you want to make requests against (e.g. `{version: 3}`)
- - auth: (default: null) `'<my oauth token>'` or `{username: 'my user', password: 'my password'}` to authenticate your requests
+ - auth: (default: null) `'<my oauth token>'` or `{username: 'my user', password: 'my password', otp: 'my optional 2 factor authentication code'}` to authenticate your requests
  - cache: (default: null) proivde a caching mechanism for "get" requests. Can be `'memory'`, `'file'` or a [custom cache](https://github.com/ForbesLindesay/http-basic#implementing-a-cache) (only "file" will work with the "sync" option)
  - sync: (default: false) set this to true and you will get a fully synchronous GitHub client, just use the results of functions directly, no need for promises or callbacks.
 
